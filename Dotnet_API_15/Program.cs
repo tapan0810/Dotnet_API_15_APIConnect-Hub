@@ -1,5 +1,6 @@
 using Dotnet_API_15.Data;
 using Dotnet_API_15.Service;
+using Dotnet_API_15.Service.CacheService;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -10,12 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
 builder.Services.AddDbContext<PlayerDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IPlayerService, PlayerService>();
 
-
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped<ICacheService, CacheService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
